@@ -2,8 +2,8 @@ import React from "react";
 import Button from 'react-bootstrap/Button';
 
 // Destructuring within the function parameters
-// Extracts 4 properties from the object to be passed to JokeDisplay component
-const JokeDisplay = ({ randomJoke, showPunchline, countdown, newJoke }) => {
+// Extracts 3 properties from the object to be passed to JokeDisplay component
+const JokeDisplay = ({ randomJoke, countdown, newJoke }) => {
     return (
         <div>
             <div className="joke-display">
