@@ -6,9 +6,6 @@ const JokeData = () => {
   // useState hook to manage the different states
   const [data, setData] = useState([]);
   const [randomJoke, setRandomJoke] = useState(null);
-  const [showPunchline, setShowPunchline] = useState(false);
-
-  const [countdown, setCountdown] = useState(3);
 
   // useEffect hook to handle side effects, in this case data fetching
   useEffect(() => {
@@ -45,18 +42,6 @@ const JokeData = () => {
     if (data.length > 0) {
       const randomIndex = Math.floor(Math.random() * data.length);
       setRandomJoke(data[randomIndex]);
-      const countdownInterval = setInterval(() => {
-        setCountdown((countdown) => countdown - 1);
-      }, 1000);
-      // setCountdown(3); // Resets countdown
-      setShowPunchline(false); // Hides punchline display until next countdown completed
-
-      setTimeout(() => {
-        // Clear countdown interval after 3 second delay
-        clearInterval(countdownInterval);
-        // State changes to true to display punchline
-        setShowPunchline(true);
-      }, 3000);
     }
   };
 
@@ -65,16 +50,10 @@ const JokeData = () => {
   // If it exist, it will render the JokeDisplay component.
   return (
     <div>
-      {countdown}
       {!randomJoke ? (
         <JokeButton newJoke={newJoke} />
       ) : (
-        <JokeDisplay
-          randomJoke={randomJoke}
-          showPunchline={showPunchline}
-          countdown={countdown}
-          newJoke={newJoke}
-        />
+        <JokeDisplay randomJoke={randomJoke} newJoke={newJoke} />
       )}
     </div>
   );
