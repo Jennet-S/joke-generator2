@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState,useRef } from "react";
 import JokeDisplay from "../components/JokeDisplay";
 import JokeButton from "../components/JokeButton";
 
@@ -7,10 +7,11 @@ const JokeData = () => {
     const [data, setData] = useState([]);
     const [randomJoke, setRandomJoke] = useState(null);
     const [showPunchline, setShowPunchline] = useState(false);
-    const [countdown, setCountdown] = useState(3);
+    const countdown = useRef(3)
 
     // useEffect hook to handle side effects, in this case data fetching
     useEffect(() => {
+     // Decrease countdown by 1 every second
         // Fetches the data from the API when component is mounted. 
         // Will refresh when component updates(but won't refresh page). 
         // Promise and error handling
@@ -44,19 +45,24 @@ const JokeData = () => {
         if (data.length > 0) {
             const randomIndex = Math.floor(Math.random() * data.length);
             setRandomJoke(data[randomIndex]);
-            setCountdown(3); // Resets countdown
+            countdown.current =3;
+            const countdownInterval = setInterval(() => {
+                countdown.current--;
+                console.log('countdown',countdown.current);
+                if(countdown.current<=0){
+                    clearInterval(countdownInterval);
+                }
+            }, 1000);
+            // setCountdown(3); // Resets countdown
             setShowPunchline(false); // Hides punchline display until next countdown completed
 
-            const countdownInterval = setInterval(() => {
-                setCountdown((prevCount) => prevCount - 1);
-            }, 1000); // Decrease countdown by 1 every second
 
-            setTimeout(() => {
-                // Clear countdown interval after 3 second delay
-                clearInterval(countdownInterval);
-                // State changes to true to display punchline
-                setShowPunchline(true);
-            }, 3000);
+            // setTimeout(() => {
+            //     // Clear countdown interval after 3 second delay
+            //     clearInterval(countdownInterval);
+            //     // State changes to true to display punchline
+            //     setShowPunchline(true);
+            // }, 3000);
         }
     };
 
@@ -65,14 +71,14 @@ const JokeData = () => {
     // If it exist, it will render the JokeDisplay component.   
     return (
         <div>
-
+{countdown.current}
             {!randomJoke ? (
                 <JokeButton newJoke={newJoke} />
             ) : (
                 <JokeDisplay
                     randomJoke={randomJoke}
                     showPunchline={showPunchline}
-                    countdown={countdown}
+                    countdown={countdown.current}
                     newJoke={newJoke}
                 />
             )}
